@@ -8,279 +8,289 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; overflow:hidden; font-family:'Fredoka',sans-serif; }
-
-    .page {
-      height:100vh; width:100vw;
-      display:grid;
-      grid-template-rows: auto auto 1fr auto;
-      background: linear-gradient(160deg, #0f0c29 0%, #1a1040 40%, #24243e 100%);
-      color:#f0f0f0;
-      padding:12px 24px;
-      gap:10px;
-      position:relative;
+    :root {
+      --bg: #0b0f19;
+      --card-bg: rgba(26, 35, 57, 0.75);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --primary: #7c4dff;
+      --accent: #ff4081;
+      --cyan: #00e5ff;
+      --yellow: #ffab00;
+      --text: #f8fafc;
+      --muted: #94a3b8;
     }
-    .page::before {
-      content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body {
+      height: 100vh; width: 100vw; overflow: hidden;
+      font-family: 'Fredoka', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .page {
+      height: 100vh; width: 100vw;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 16px 28px;
+      gap: 14px;
       background:
-        radial-gradient(ellipse at 15% 20%, rgba(253,203,110,.12) 0%, transparent 45%),
-        radial-gradient(ellipse at 85% 80%, rgba(108,92,231,.18) 0%, transparent 45%),
-        radial-gradient(ellipse at 50% 50%, rgba(0,184,148,.08) 0%, transparent 50%);
+        radial-gradient(ellipse at 80% 15%, rgba(124, 77, 255, 0.22) 0%, transparent 45%),
+        radial-gradient(ellipse at 15% 85%, rgba(255, 171, 0, 0.18) 0%, transparent 45%),
+        var(--bg);
     }
 
     /* HEADER */
-    .header { text-align:center; z-index:1; animation: fadeDown .6s ease-out; }
-    @keyframes fadeDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:translateY(0); } }
+    .header {
+      text-align: center;
+      animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
     .badge {
-      display:inline-flex; align-items:center; gap:8px;
-      background: linear-gradient(135deg, #fdcb6e, #e17055);
-      padding:5px 18px; border-radius:50px;
-      font-size:12px; font-weight:700; color:#fff;
-      box-shadow: 0 4px 15px rgba(225,112,85,.4);
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--yellow), var(--primary));
+      padding: 6px 20px; border-radius: 30px;
+      font-size: 13px; font-weight: 700; color: #111;
+      box-shadow: 0 4px 18px rgba(255, 171, 0, 0.35);
     }
     .header h1 {
-      font-family:'Outfit',sans-serif;
-      font-size:clamp(18px,2.8vw,28px);
-      font-weight:800;
-      background: linear-gradient(135deg, #fdcb6e, #e17055, #fd79a8);
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      margin:5px 0 3px;
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(22px, 3.2vw, 32px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #ffe082 50%, #b388ff 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin: 6px 0 2px;
     }
-    .header p { color:#94a3b8; font-size:clamp(11px,1.3vw,13px); max-width:600px; margin:0 auto; }
-
-    /* HERO IMAGE */
-    .hero-section {
-      z-index:1;
-      display:flex; justify-content:center;
-      animation: scaleIn .6s ease-out .15s backwards;
-    }
-    @keyframes scaleIn { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
-    .hero-section img {
-      max-height: clamp(120px, 20vh, 200px);
-      border-radius:18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.08);
-      object-fit:cover;
+    .header p {
+      color: var(--muted);
+      font-size: clamp(12px, 1.3vw, 14px);
     }
 
-    /* 3 COLUMNS */
-    .columns {
-      display:grid;
+    /* MAIN COMPARISON GRID */
+    .compare-grid {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-      z-index:1;
-      align-content:start;
+      gap: 16px;
+      align-items: stretch;
+      min-height: 0;
     }
 
-    .col-card {
-      background: rgba(20,28,45,.8);
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:18px;
-      padding:14px;
-      display:flex; flex-direction:column;
-      position:relative;
-      overflow:hidden;
-      transition: all .35s;
-      animation: cardUp .6s ease-out backwards;
+    .compare-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.3);
+      animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .col-card:nth-child(1) { animation-delay:.2s; }
-    .col-card:nth-child(2) { animation-delay:.35s; }
-    .col-card:nth-child(3) { animation-delay:.5s; }
-    @keyframes cardUp { from { opacity:0; transform:translateY(25px); } to { opacity:1; transform:translateY(0); } }
-
-    .col-card:hover { transform:translateY(-4px); }
-    .col-card::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:3px;
-    }
-    .col-card:nth-child(1)::before { background:linear-gradient(90deg,#00cec9,#55efc4); }
-    .col-card:nth-child(2)::before { background:linear-gradient(90deg,#fdcb6e,#e17055); }
-    .col-card:nth-child(3)::before { background:linear-gradient(90deg,#6c5ce7,#fd79a8); }
-
-    .col-card:nth-child(1):hover { border-color:rgba(0,206,201,.4); box-shadow:0 8px 24px rgba(0,206,201,.2); }
-    .col-card:nth-child(2):hover { border-color:rgba(253,203,110,.4); box-shadow:0 8px 24px rgba(253,203,110,.2); }
-    .col-card:nth-child(3):hover { border-color:rgba(108,92,231,.4); box-shadow:0 8px 24px rgba(108,92,231,.2); }
-
-    .col-head {
-      display:flex; align-items:center; gap:10px;
-      margin-bottom:8px;
-    }
-    .col-emoji { font-size:clamp(28px,4vw,40px); }
-    .col-head h2 {
-      font-family:'Outfit',sans-serif;
-      font-size:clamp(14px,1.6vw,18px);
-      font-weight:700;
-    }
-    .col-card:nth-child(1) h2 { color:#00cec9; }
-    .col-card:nth-child(2) h2 { color:#fdcb6e; }
-    .col-card:nth-child(3) h2 { color:#a29bfe; }
-
-    .col-tag {
-      font-size:9px; font-weight:700; text-transform:uppercase;
-      letter-spacing:1.5px; padding:2px 8px; border-radius:20px;
-      display:inline-block; margin-bottom:6px;
-    }
-    .col-card:nth-child(1) .col-tag { background:rgba(0,206,201,.12); color:#00cec9; }
-    .col-card:nth-child(2) .col-tag { background:rgba(253,203,110,.12); color:#fdcb6e; }
-    .col-card:nth-child(3) .col-tag { background:rgba(108,92,231,.15); color:#a29bfe; }
-
-    .trait-list { list-style:none; flex:1; }
-    .trait-list li {
-      display:flex; align-items:center; gap:8px;
-      padding:4px 0; font-size:clamp(11px,1.15vw,13px); color:#94a3b8;
-      border-bottom:1px solid rgba(255,255,255,.03);
-    }
-    .trait-list li:last-child { border-bottom:none; }
-    .trait-list li strong { color:#fff; }
-    .trait-list .ti { font-size:15px; flex-shrink:0; }
-
-    .fun-fact {
-      margin-top:6px; padding:6px 10px; border-radius:10px;
-      font-size:clamp(10px,1vw,12px); font-weight:600; font-style:italic;
-    }
-    .col-card:nth-child(1) .fun-fact { background:rgba(0,206,201,.08); color:#55efc4; }
-    .col-card:nth-child(2) .fun-fact { background:rgba(253,203,110,.08); color:#ffeaa7; }
-    .col-card:nth-child(3) .fun-fact { background:rgba(108,92,231,.1); color:#a29bfe; }
-
-    /* VS badges */
-    .vs {
-      position:absolute; top:50%; left:-16px; transform:translateY(-50%);
-      background:linear-gradient(135deg,#e17055,#fd79a8);
-      color:#fff; font-weight:800; font-size:10px;
-      width:30px; height:30px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      box-shadow:0 4px 12px rgba(0,0,0,.5);
-      z-index:2;
+    .compare-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--cyan);
+      box-shadow: 0 20px 40px rgba(0, 229, 255, 0.2);
     }
 
-    /* Comparison ribbon */
-    .ribbon {
-      display:flex; justify-content:center; gap:6px; flex-wrap:wrap;
-      z-index:1;
-      animation: fadeUp .5s ease-out .6s backwards;
+    .card-img-wrap {
+      width: 100%; height: 145px;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      background: rgba(0,0,0,0.3);
     }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-    .ribbon-item {
-      display:flex; align-items:center; gap:5px;
-      background:rgba(30,41,59,.5);
-      border:1px solid rgba(255,255,255,.05);
-      padding:5px 12px; border-radius:10px;
-      font-size:clamp(9px,1vw,11px);
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s ease;
     }
-    .ribbon-item .ri { font-size:14px; }
-    .ribbon-item .rl { color:#94a3b8; }
-    .ribbon-item .rv { color:#fff; font-weight:700; }
+    .compare-card:hover .card-img-wrap img {
+      transform: scale(1.06);
+    }
+
+    .card-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .card-icon {
+      font-size: 24px;
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-1 .card-icon { background: rgba(255, 64, 129, 0.2); }
+    .card-2 .card-icon { background: rgba(255, 171, 0, 0.2); }
+    .card-3 .card-icon { background: rgba(0, 229, 255, 0.2); }
+
+    .card-title h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px; font-weight: 800; color: #fff;
+    }
+    .card-title span {
+      font-size: 11px; color: var(--muted); font-weight: 600;
+    }
+
+    .card-body-text {
+      font-size: 12px; color: #cbd5e1; line-height: 1.45; margin-bottom: 8px;
+    }
+
+    .callout-box {
+      background: rgba(0,0,0,0.3);
+      border-left: 3px solid var(--cyan);
+      border-radius: 0 10px 10px 0;
+      padding: 8px 10px;
+      font-size: 11px; color: #e2e8f0; line-height: 1.4;
+      margin-bottom: 10px;
+    }
+    .card-1 .callout-box { border-left-color: #ff4081; }
+    .card-2 .callout-box { border-left-color: #ffab00; }
+    .card-3 .callout-box { border-left-color: #00e5ff; }
+
+    .feature-tags {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .ft-item {
+      background: rgba(0,0,0,0.25);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px; color: #e2e8f0;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .ft-item span { color: var(--cyan); font-weight: 700; }
 
     /* FOOTER */
     .footer {
-      display:flex; align-items:center; justify-content:center;
-      z-index:1;
+      display: flex; justify-content: center; align-items: center;
+      animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .pw-box {
-      display:flex; align-items:center; gap:12px;
-      background:linear-gradient(135deg,#1e1b4b,#311b92);
-      padding:8px 20px; border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
+    .pass-box {
+      background: linear-gradient(135deg, #1d0c3d 0%, #2f0d4f 100%);
+      border: 1.5px solid var(--primary);
+      border-radius: 18px;
+      padding: 10px 24px;
+      display: flex; align-items: center; gap: 16px;
+      box-shadow: 0 8px 30px rgba(124, 77, 255, 0.35);
     }
-    .pw-label { font-size:10px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; }
-    .pw-code {
-      font-size:clamp(16px,2.2vw,22px); font-weight:700; color:#fff;
-      background:rgba(255,255,255,.08);
-      border:2px solid #a55eea;
-      padding:3px 14px; border-radius:10px;
-      letter-spacing:2px; user-select:all;
-      box-shadow:0 0 18px rgba(108,92,231,.4);
+    .pass-title {
+      font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 1px; font-weight: 600;
     }
-    .pw-hint { font-size:10px; color:#94a3b8; max-width:170px; }
+    .pass-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px; font-weight: 800; color: #fff;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 4px 20px; border-radius: 12px;
+      letter-spacing: 2px;
+      user-select: all;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .pass-sub {
+      font-size: 11px; color: var(--muted); max-width: 220px;
+    }
 
-    @media (max-width:768px) {
-      .columns { grid-template-columns:1fr; }
-      .vs { display:none; }
-      .page { overflow-y:auto; }
-      html,body { overflow:auto; }
-    }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
   <div class="page">
     <!-- HEADER -->
     <div class="header">
-      <div class="badge">🧠 2. ADIM · YAPAY ZEKÂYA GİRİŞ</div>
-      <h1>Zekâ Nedir? İnsan mı, Hayvan mı, Yapay Zekâ mı Daha Zeki?</h1>
-      <p>Hepsinin güçlü yanları var! Hangisinin neyi daha iyi yaptığını keşfet 👇</p>
+      <div class="badge">🧠 2. ADIM · ZEKÂ KAVRAMI</div>
+      <h1>Zekâ Nedir? İnsan, Hayvan ve Yapay Zekâ</h1>
+      <p>Öğrenme, uyum sağlama ve problem çözme yeteneklerini 3 farklı dünyada karşılaştıralım.</p>
     </div>
 
-    <!-- HERO IMAGE -->
-    <div class="hero-section">
-      <img src="intelligence.png" alt="İnsan, Hayvan ve Yapay Zekâ Karşılaştırması">
-    </div>
-
-    <!-- 3 COLUMNS -->
-    <div class="columns">
-      <div class="col-card">
-        <div class="col-tag">Biyolojik Zekâ</div>
-        <div class="col-head">
-          <div class="col-emoji">🧑‍🎨</div>
-          <h2>İnsan Zekası</h2>
+    <!-- MAIN GRID -->
+    <div class="compare-grid">
+      <!-- CARD 1 -->
+      <div class="compare-card card-1">
+        <div>
+          <div class="card-img-wrap">
+            <img src="v3_human.png" alt="İnsan Zekası">
+          </div>
+          <div class="card-head">
+            <div class="card-icon">👨‍👩‍👧‍👦</div>
+            <div class="card-title">
+              <h3>İnsan Zekası</h3>
+              <span>Biyolojik & Duygusal</span>
+            </div>
+          </div>
+          <div class="card-body-text">
+            Duygular, sezgi, hayal gücü ve sanat yeteneği. Yaşayarak ve hissederek öğreniriz.
+          </div>
+          <div class="callout-box">
+            💡 İnsan beyni 86 milyar nöron içerir — yaratıcılık ve empati en büyük gücümüzdür.
+          </div>
         </div>
-        <ul class="trait-list">
-          <li><span class="ti">💡</span> <strong>Yaratıcılık:</strong> Müzik, resim, şiir yapar</li>
-          <li><span class="ti">❤️</span> <strong>Empati:</strong> Başkalarının duygularını anlar</li>
-          <li><span class="ti">🎭</span> <strong>Hayal gücü:</strong> Hiç olmayan şeyleri düşünür</li>
-          <li><span class="ti">🗣️</span> <strong>İletişim:</strong> 7000+ dilde konuşabilir</li>
-        </ul>
-        <div class="fun-fact">💡 Beynin 86 milyar nöron içerir — galaksideki yıldız kadar!</div>
+        <div class="feature-tags">
+          <div class="ft-item"><span>✓</span> Yaratıcı Sanat & Düşünce</div>
+          <div class="ft-item"><span>✓</span> Empati & Duygular</div>
+          <div class="ft-item"><span>✓</span> Soyut Problem Çözme</div>
+        </div>
       </div>
 
-      <div class="col-card" style="position:relative;">
-        <div class="vs">VS</div>
-        <div class="col-tag">Doğa Zekâsı</div>
-        <div class="col-head">
-          <div class="col-emoji">🐬</div>
-          <h2>Hayvan Zekası</h2>
+      <!-- CARD 2 -->
+      <div class="compare-card card-2">
+        <div>
+          <div class="card-img-wrap">
+            <img src="v3_animal.png" alt="Hayvan Zekası">
+          </div>
+          <div class="card-head">
+            <div class="card-icon">🐬</div>
+            <div class="card-title">
+              <h3>Hayvan Zekası</h3>
+              <span>İçgüdüsel & Uyumlu</span>
+            </div>
+          </div>
+          <div class="card-body-text">
+            Doğal içgüdüler, taklit ile öğrenme ve çevreye mükemmel uyum sağlama zekası.
+          </div>
+          <div class="callout-box">
+            🐬 Yunuslar birbiriyle ıslık isimleriyle iletişim kurar ve araç gereç kullanabilir.
+          </div>
         </div>
-        <ul class="trait-list">
-          <li><span class="ti">🐙</span> <strong>Problem çözme:</strong> Ahtapot kavanoz açar!</li>
-          <li><span class="ti">🦜</span> <strong>Taklit:</strong> Papağan konuşmayı öğrenir</li>
-          <li><span class="ti">🐕</span> <strong>Sadakat:</strong> Köpekler insan duygularını hisseder</li>
-          <li><span class="ti">🧭</span> <strong>Navigasyon:</strong> Göçmen kuşlar GPS'siz yol bulur</li>
-        </ul>
-        <div class="fun-fact">🐬 Yunuslar birbirlerine isimle seslenir!</div>
+        <div class="feature-tags">
+          <div class="ft-item"><span>✓</span> Güçlü İçgüdü & Sezgi</div>
+          <div class="ft-item"><span>✓</span> Çevreye Adaptasyon</div>
+          <div class="ft-item"><span>✓</span> Taklit ile Öğrenme</div>
+        </div>
       </div>
 
-      <div class="col-card" style="position:relative;">
-        <div class="vs">VS</div>
-        <div class="col-tag">Dijital Zekâ</div>
-        <div class="col-head">
-          <div class="col-emoji">🤖</div>
-          <h2>Yapay Zekâ</h2>
+      <!-- CARD 3 -->
+      <div class="compare-card card-3">
+        <div>
+          <div class="card-img-wrap">
+            <img src="v3_ai.png" alt="Yapay Zekâ">
+          </div>
+          <div class="card-head">
+            <div class="card-icon">💻</div>
+            <div class="card-title">
+              <h3>Yapay Zekâ (AI)</h3>
+              <span>Dijital & Algoritmik</span>
+            </div>
+          </div>
+          <div class="card-body-text">
+            Bilgisayarların insan benzeri öğrenme, karar verme ve devasa veri işleme gücü.
+          </div>
+          <div class="callout-box">
+            🤖 Yapay zekâ saniyede milyarlarca veriyi süzerek kalıpları ışık hızında anlar.
+          </div>
         </div>
-        <ul class="trait-list">
-          <li><span class="ti">⚡</span> <strong>Süper hız:</strong> Saniyede milyarlarca işlem!</li>
-          <li><span class="ti">👁️</span> <strong>Görme:</strong> Yüzleri ve nesneleri tanır</li>
-          <li><span class="ti">🎮</span> <strong>Oyun:</strong> Satranç şampiyonlarını yener</li>
-          <li><span class="ti">📊</span> <strong>Veri:</strong> Milyonlarca veriyi anında analiz eder</li>
-        </ul>
-        <div class="fun-fact">🤖 AlphaGo, dünya Go şampiyonunu yendi!</div>
+        <div class="feature-tags">
+          <div class="ft-item"><span>✓</span> Işık Hızında Veri İşleme</div>
+          <div class="ft-item"><span>✓</span> Yüz & Ses Algılama</div>
+          <div class="ft-item"><span>✓</span> Kesintisiz Dijital Öğrenme</div>
+        </div>
       </div>
-    </div>
-
-    <!-- Comparison ribbon -->
-    <div class="ribbon">
-      <div class="ribbon-item"><span class="ri">⚡</span><span class="rl">Hız:</span><span class="rv">YZ 🏆</span></div>
-      <div class="ribbon-item"><span class="ri">❤️</span><span class="rl">Empati:</span><span class="rv">İnsan 🏆</span></div>
-      <div class="ribbon-item"><span class="ri">🧭</span><span class="rl">İçgüdü:</span><span class="rv">Hayvan 🏆</span></div>
-      <div class="ribbon-item"><span class="ri">🎨</span><span class="rl">Yaratıcılık:</span><span class="rv">İnsan 🏆</span></div>
-      <div class="ribbon-item"><span class="ri">📊</span><span class="rl">Veri:</span><span class="rv">YZ 🏆</span></div>
     </div>
 
     <!-- FOOTER -->
     <div class="footer">
-      <div class="pw-box">
+      <div class="pass-box">
         <div>
-          <div class="pw-label">Talent14 Geçiş Şifresi</div>
-          <div class="pw-code">yapayzeka</div>
+          <div class="pass-title">Talent14 Adım Şifresi</div>
+          <div class="pass-val">yapayzeka</div>
         </div>
-        <div class="pw-hint">Talent14'te sağ üstteki mor (?) butonuyla bu şifreyi girin.</div>
+        <div class="pass-sub">Talent14 sisteminde sağ üstteki mor soru işareti (?) butonuna tıklayarak bu şifreyi giriniz.</div>
       </div>
     </div>
   </div>
